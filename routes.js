@@ -9,32 +9,19 @@ router.get('/catch', (req, res) => {
 })
 
 // RELEASE
-router.delete('/release', (req, res) => {
+//FIXME: change to delete or post
+router.get('/release', (req, res) => {
     res.send('release: random number ')
 })
 
 //RENAME
-//FIXME: change to post
+//FIXME: change to put or post
 router.get('/rename', (req, res) => {
-  const sqlite3 = require('sqlite3').verbose()
-  const db = new sqlite3.Database('mypokemon.db', sqlite3.OPEN_READWRITE, (err) => {
-    if (err) {
-      console.error(err.message)
-    }
-    console.log('Connected to the mypokemon database.')
-  })
-  
-  db.serialize(() => {
-    // db.run('CREATE TABLE renamedPokemon (pokemonId INT, newNickname TEXT, renameCount INT)')
-    db.run('INSERT INTO renamedPokemon (pokemonId, newNickname, renameCount) VALUES (2, "my pokemon 3", -1)')
-
-  
-    db.each('SELECT * FROM renamedPokemon', (err, row) => {
-      console.log(JSON.stringify(row))
-    })
-  })
-  
-  db.close()
+  const mypokemon = require('./mypokemon')
+  const id1 = mypokemon.renameCount(1)
+  const id2 = mypokemon.renameCount(2)
+  console.log("id 1: "+JSON.stringify(id1))
+  console.log("id 2: "+JSON.stringify(id2))
 
   res.send('lorem')
 })
