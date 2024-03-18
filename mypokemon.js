@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose()
 
 function openDB() {
-    const file = new sqlite3.Database('mypokemon.db', sqlite3.OPEN_READWRITE, (err) => {
+    const file = new sqlite3.Database('mypokemon.db', (err) => {
         if (err) {
             console.error(err.message)
         }
@@ -9,10 +9,6 @@ function openDB() {
     })
 
     return file
-}
-
-function insert() {
-    executeDB('INSERT INTO renamedPokemon (pokemonId, newNickname, renameCount) VALUES (2, "my pokemon 3", -1)')
 }
 
 function executeDB(query, params) {
@@ -33,16 +29,40 @@ function executeDB(query, params) {
     })
 }
 
+function createTableIfNotExist() {
+    const tt = executeDB(
+        'CREATE TABLE IF NOT EXISTS renamedPokemon (\
+            PokemonId int NOT NULL,\
+            Nickname varchar(255) NOT NULL,\
+            RenameCount int,\
+            PRIMARY KEY (PokemonId)\
+        )'
+    )
+
+    tt.then((value) => {
+        console.log('value: '+ JSON.stringify(value))
+    })
+
+}
+
+function insert(pokemonId, newNickname, renameCount) {
+    executeDB('INSERT INTO renamedPokemon (pokemonId, newNickname, renameCount) VALUES (?, ?, ?)')
+}
+
+function update(pokemonId, newNickname, renameCount) {
+    executeDB('INSERT INTO renamedPokemon (pokemonId, newNickname, renameCount) VALUES (?, ?, ?)')
+}
+
 async function renameCount(pokemonId) {
     
     var renameCount = new Number(-2)
     try {
         const result = await executeDB('SELECT renameCount FROM renamedPokemon WHERE pokemonId=?', [pokemonId])
-        console.log('result from renameCount: '+JSON.stringify(result))
+        console.log('result from renameCount id: ' + pokemonId + ': '+JSON.stringify(result))
       } catch (err) {
         return console.error(err.message);
       }
 
     
 }
-module.exports = { insert, renameCount }
+module.exports = { insert, renameCount, createTableIfNotExist }

@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express()
 const port = 3000
-const routes = require('./routes')
+const routes = require('./routes');
+const { createTableIfNotExist } = require('./mypokemon');
 
 app.use('/api', routes);
 
@@ -14,5 +15,6 @@ var staticFileOptions = {
 app.use(express.static('public', staticFileOptions))
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server running at http://localhost:${port}`)
+  createTableIfNotExist()
 });
