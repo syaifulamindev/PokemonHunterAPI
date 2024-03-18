@@ -4,14 +4,22 @@ const router = express.Router()
 // CATCH
 router.get('/catch', (req, res) => {
   const isCatched = Math.random() < 0.5
-  const result = {catch: isCatched}
+  const result = {
+    catch: isCatched
+  }
   res.send(JSON.stringify(result))
 })
 
 // RELEASE
 //FIXME: change to delete or post
 router.get('/release', (req, res) => {
-    res.send('release: random number ')
+  const randomInt = getRandomInt(100)
+  const isPrime = checkPrime(randomInt)
+  const result = {
+    number: randomInt,
+    isPrime: isPrime
+  }
+    res.send(JSON.stringify(result))
 })
 
 //RENAME
@@ -31,4 +39,23 @@ function fib(n) {
   let phi = (1 + Math.sqrt(5)) / 2; 
   return Math.round(Math.pow(phi, n) / Math.sqrt(5)); 
 }
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * (max + 1));
+}
+
+function checkPrime(n) { 
+  // Corner case 
+  if (n <= 1) 
+      return false
+
+  // Check from 2 to n-1 
+  for (let i = 2; i < n; i++) 
+      if (n % i == 0) 
+          return false
+
+  return true
+} 
+
+
 module.exports = router
