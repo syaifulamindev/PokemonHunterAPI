@@ -6,12 +6,7 @@ const routes = require('./routes')
 app.use('/api', routes);
 
 var staticFileOptions = {
-  dotfiles: 'ignore',
-  etag: false,
   extensions: ['png'],
-  index: false,
-  maxAge: '1d',
-  redirect: false,
   setHeaders: function (res, path, stat) {
     res.set('x-timestamp', Date.now())
   }
