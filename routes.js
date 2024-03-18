@@ -3,7 +3,9 @@ const router = express.Router()
 
 // CATCH
 router.get('/catch', (req, res) => {
-  res.send('catch: random boolean ')
+  const isCatched = Math.random() < 0.5
+  const result = {catch: isCatched}
+  res.send(JSON.stringify(result))
 })
 
 // RELEASE
