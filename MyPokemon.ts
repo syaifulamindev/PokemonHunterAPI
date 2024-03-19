@@ -23,6 +23,8 @@ function executeDB(query: string, params: any[]) {
                 reject(err);
             }
 
+            console.log("error: "+JSON.stringify(err))
+            console.log("type of rows: "+ typeof(rows)+"\n"+JSON.stringify(rows))
             // "return" the result when the action finish
             resolve(rows);
         })
@@ -33,10 +35,10 @@ function executeDB(query: string, params: any[]) {
 export function createTableIfNotExist() {
     const tt = executeDB(
         `CREATE TABLE IF NOT EXISTS RenamedPokemon (
-            PokemonId int NOT NULL,
+            PokemonID int NOT NULL,
             Nickname varchar(255) NOT NULL,
             RenameCount int,
-            PRIMARY KEY (PokemonId)
+            PRIMARY KEY (PokemonID)
         )`,
         []
     )
@@ -48,32 +50,20 @@ export function createTableIfNotExist() {
 }
 
 async function insert(pokemonId: number, newNickname: string) {
-    const renameCount = await getRenameCount(pokemonId)
-    if (renameCount == -2) {
-        const aaa = await executeDB('INSERT INTO RenamedPokemon (PokemonId, Nickname, RenameCount) VALUES (?, ?, ?)', [pokemonId, newNickname, renameCount])
-        console.log('insert: ' + JSON.stringify(aaa))
-    } else {
-        throw new APIError(
-        'ALREADY FOUND',
-        HttpStatusCode.BAD_REQUEST
-        )
-    }
-    
+    await executeDB('INSERT INTO RenamedPokemon (PokemonID, Nickname, RenameCount) VALUES (?, ?, ?)', [pokemonId, newNickname, 0])
 }
 
-async function update(pokemonId: number, renameCount: number) {
+async function rename(pokemonId: number, renameCount: number) {
     await executeDB('UPDATE RenamedPokemon SET RenameCount = ? WHERE PokemonID = ?', [renameCount, pokemonId])
 }
 
-async function getRenameCount(pokemonId: number) {
-    var renameCount = new Number(-2)
-    try {
-        const result = await executeDB('SELECT renameCount FROM renamedPokemon WHERE pokemonId=?', [pokemonId])
-    } catch (err) {
-        throw err
-    }
-    return renameCount
+async function getPokemon(pokemonId: number) {
+    return await executeDB('SELECT RenameCount as renameCount, Nickname as nickname, PokemonID as pokemonId FROM renamedPokemon WHERE pokemonId=?', [pokemonId])
+}
+
+async function remove(pokemonId: number) {
+    return await executeDB('DELETE FROM RenamedPokemon WHERE PokemonID=?', [pokemonId])
 }
 
 
-module.exports = { insert, createTableIfNotExist, getRenameCount, update }
+module.exports = { insert, createTableIfNotExist, getPokemon, rename, remove }

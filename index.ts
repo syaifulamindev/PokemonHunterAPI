@@ -1,9 +1,9 @@
-import express, { Express, Request, Response } from "express"
+import express, { Express, Request, Response, NextFunction } from "express"
+import routes from './routes'
+import "express-async-errors"
 
 const app = express()
 const port = 3000
-import routes from './routes'
-// const bodyParser = require('body-parser')
 
 const { createTableIfNotExist } = require('./MyPokemon');
 
@@ -21,10 +21,3 @@ app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`)
   createTableIfNotExist()
 });
-
-// const jsonErrorHandler = (err: any, req: any, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: { error: any }): void; new(): any } } }, next: any) => {
-//   res.status(500).send({ error: err });
-// }
-
-// app.use(bodyParser.json())
-// app.use(jsonErrorHandler)
