@@ -19,8 +19,7 @@ router.delete('/release', async (req, res) => {
   const isPrime = checkPrime(randomInt)
 
   const pokemonId = req.query.pokemonId
-  // if (isPrime && !isEmpty(pokemonId)) {
-    if (true) {
+  if (isPrime && !isEmpty(pokemonId)) {
     try {
       await mypokemon.remove(pokemonId).then(
         () => {
