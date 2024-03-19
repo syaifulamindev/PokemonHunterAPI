@@ -58,7 +58,7 @@ async function rename(pokemonId: number, renameCount: number) {
 }
 
 async function getPokemon(pokemonId: number) {
-    return await executeDB('SELECT RenameCount as renameCount, Nickname as nickname, PokemonID as pokemonId FROM renamedPokemon WHERE pokemonId=?', [pokemonId])
+    return await executeDB('SELECT RenameCount as renameCount, Nickname as nickname, PokemonID as pokemonId FROM RenamedPokemon WHERE pokemonId=?', [pokemonId])
 }
 
 async function remove(pokemonId: number) {
