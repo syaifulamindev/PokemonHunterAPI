@@ -49,13 +49,12 @@ router.delete('/release', async (req, res) => {
 })
 
 //RENAME
-router.post('/rename', async (req, res) => {
-  
-
-
-  const pokemons: [any] = await mypokemon.getPokemon(1)
-  const pokemon = pokemons[0]
+router.put('/rename', async (req, res) => {
   const reqPokemonId = req.query.pokemonId
+
+  const pokemons: [any] = await mypokemon.getPokemon(reqPokemonId)
+  const pokemon = pokemons[0]
+  
   const reqNickname = req.query.nickname
 
   if (isEmpty(pokemon) && reqNickname != undefined) {
@@ -80,6 +79,14 @@ router.post('/rename', async (req, res) => {
     )
   } else {
 
+
+    console.log(` RENAME
+    reqPokemonId: ${reqPokemonId}
+    reqNickname: ${reqNickname}
+    req.body: ${req.body}
+    method: ${req.method}
+    rawHeaders: ${req.rawHeaders}
+    `)
     res.status(400).send(
       new APIError("pokemon is not found, please input your nickname", HttpStatusCode.BAD_REQUEST)
     )
