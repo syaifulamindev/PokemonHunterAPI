@@ -49,7 +49,7 @@ router.delete('/release', async (req, res) => {
 })
 
 //RENAME
-router.put('/rename', async (req, res) => {
+router.post('/rename', async (req, res) => {
   
 
 
